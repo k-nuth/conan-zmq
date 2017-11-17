@@ -1,2 +1,2 @@
 # bitprim-conan-zmq
-ZeroMQ base C++ library conan package
+ZeroMQ base C++ library Conan package
