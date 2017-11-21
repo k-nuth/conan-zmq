@@ -4,7 +4,7 @@ from conans import ConanFile, CMake, tools
 class ZMQConan(ConanFile):
     name = "libzmq"
     version = "4.2.2"
-    version_flat = "4_2_0"
+    version_flat = "4_2_2"
     license = "LGPL"
     url = "https://github.com/bitprim/bitprim-conan-zmq.git"
     description = "ZMQ is a network, sockets on steroids library. Safe for use in commercial applications LGPL v3 with static linking exception"
@@ -15,7 +15,9 @@ class ZMQConan(ConanFile):
     generators = "cmake"
 
     def source(self):
-        self.run("git clone https://github.com/zeromq/libzmq.git")
+        # self.run("git clone https://github.com/zeromq/libzmq.git")
+        self.run("git clone git@github.com:zeromq/libzmq.git")
+        
         self.run("cd libzmq && git checkout v4.2.2")
         tools.replace_in_file("libzmq/CMakeLists.txt", "project (ZeroMQ)", """project (ZeroMQ)
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
