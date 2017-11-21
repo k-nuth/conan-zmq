@@ -18,6 +18,8 @@ class ZMQTestConan(ConanFile):
     def imports(self):
         self.copy("*.dll", "bin", "bin")
         self.copy("*.dylib", "bin", "lib")
+        self.copy("*.a", "lib", "lib")
+        self.copy("*.lib", "lib", "lib")
 
     def test(self):
         print ("Running test")
