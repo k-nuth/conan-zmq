@@ -22,21 +22,33 @@ class ZMQConan(ConanFile):
 
         self.run("cd libzmq && git checkout tags/v4.2.2 -b bitprim_4.2.2")
 
-#         tools.replace_in_file("libzmq/CMakeLists.txt", "project (ZeroMQ)", """project (ZeroMQ)
-# include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-# conan_basic_setup()
-# """)
+        tools.replace_in_file("libzmq/CMakeLists.txt", "project (ZeroMQ)", """project (ZeroMQ)
+include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+conan_basic_setup()
+""")
           
     def build(self):
         # cmake = CMake(self.settings)
         cmake = CMake(self)
-        self.run('cmake libzmq %s -DZMQ_BUILD_TESTS=OFF -DZMQ_BUILD_FRAMEWORK=OFF' % cmake.command_line)
-        self.run("cmake --build . %s" % cmake.build_config)
+        
+        cmake_cmd_1 = 'cmake libzmq %s -DZMQ_BUILD_TESTS=OFF -DZMQ_BUILD_FRAMEWORK=OFF' % cmake.command_line
+        cmake_cmd_2 = "cmake --build . %s" % cmake.build_config
+
+        print(cmake_cmd_1)
+        print(cmake_cmd_2)
+
+        self.run(cmake_cmd_1)
+        self.run(cmake_cmd_2)
+
+        # self.run('cmake libzmq %s -DZMQ_BUILD_TESTS=OFF -DZMQ_BUILD_FRAMEWORK=OFF' % cmake.command_line)
+        # self.run("cmake --build . %s" % cmake.build_config)
 
     def package(self):
+
         # self.copy_headers("*", "libzmq/include")
         self.copy("*.h", dst="include", src="include")
         self.copy("*.hpp", dst="include", src="include")
+
         self.copy("FindZeroMQ.cmake")
         if not self.options.shared:
             self.copy("*libzmq*-mt-s*.lib", "lib", "lib", keep_path=False)
