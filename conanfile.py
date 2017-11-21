@@ -28,7 +28,8 @@ class ZMQConan(ConanFile):
 # """)
           
     def build(self):
-        cmake = CMake(self.settings)
+        # cmake = CMake(self.settings)
+        cmake = CMake(self)
         self.run('cmake libzmq %s -DZMQ_BUILD_TESTS=OFF -DZMQ_BUILD_FRAMEWORK=OFF' % cmake.command_line)
         self.run("cmake --build . %s" % cmake.build_config)
 
