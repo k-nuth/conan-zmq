@@ -21,10 +21,11 @@ class ZMQConan(ConanFile):
         # self.run("git clone git@github.com:zeromq/libzmq.git")
 
         self.run("cd libzmq && git checkout tags/v4.2.2 -b bitprim_4.2.2")
-        tools.replace_in_file("libzmq/CMakeLists.txt", "project (ZeroMQ)", """project (ZeroMQ)
-include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-conan_basic_setup()
-""")
+
+#         tools.replace_in_file("libzmq/CMakeLists.txt", "project (ZeroMQ)", """project (ZeroMQ)
+# include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+# conan_basic_setup()
+# """)
           
     def build(self):
         cmake = CMake(self.settings)
