@@ -15,8 +15,11 @@ class ZMQConan(ConanFile):
     generators = "cmake"
 
     def source(self):
-        self.run("git clone https://github.com/zeromq/libzmq.git")
+
+        self.run("git -c http.sslVerify=false clone https://github.com/zeromq/libzmq.git")
+        # self.run("git clone https://github.com/zeromq/libzmq.git")
         # self.run("git clone git@github.com:zeromq/libzmq.git")
+
         self.run("cd libzmq && git checkout tags/v4.2.2 -b bitprim_4.2.2")
         tools.replace_in_file("libzmq/CMakeLists.txt", "project (ZeroMQ)", """project (ZeroMQ)
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
