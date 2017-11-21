@@ -31,7 +31,7 @@ conan_basic_setup()
         # cmake = CMake(self.settings)
         cmake = CMake(self)
         
-        cmake_cmd_1 = 'cmake libzmq %s -DZMQ_BUILD_TESTS=OFF -DZMQ_BUILD_FRAMEWORK=OFF' % cmake.command_line
+        cmake_cmd_1 = 'cmake libzmq %s -DCMAKE_SH="CMAKE_SH-NOTFOUND" -DZMQ_BUILD_TESTS=OFF -DZMQ_BUILD_FRAMEWORK=OFF' % cmake.command_line
         cmake_cmd_2 = "cmake --build . %s" % cmake.build_config
 
         print(cmake_cmd_1)
