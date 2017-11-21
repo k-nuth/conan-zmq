@@ -1,8 +1,8 @@
 from conans import ConanFile, CMake
 import os
 
-channel = os.getenv("CONAN_CHANNEL", "testing")
-username = os.getenv("CONAN_USERNAME", "memsharded")
+channel = os.getenv("CONAN_CHANNEL", "stable")
+username = os.getenv("CONAN_USERNAME", "bitprim")
 
 class ZMQTestConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
