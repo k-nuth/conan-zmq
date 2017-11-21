@@ -19,7 +19,7 @@
 
 env:
    global:
-     - CONAN_REFERENCE: "libzmq/4.2.0"
+     - CONAN_REFERENCE: "libzmq/4.2.2"
      - CONAN_USERNAME: "bitprim"
      - CONAN_LOGIN_USERNAME: "bitprim-bintray"
      - CONAN_CHANNEL: "stable"

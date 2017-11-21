@@ -24,7 +24,7 @@ environment:
     PYTHON_VERSION: "2.7.8"
     PYTHON_ARCH: "32"
 
-    CONAN_REFERENCE: "libzmq/4.2.0"
+    CONAN_REFERENCE: "libzmq/4.2.2"
     CONAN_USERNAME: "bitprim"
     CONAN_LOGIN_USERNAME: "bitprim-bintray"
     CONAN_CHANNEL: "stable"

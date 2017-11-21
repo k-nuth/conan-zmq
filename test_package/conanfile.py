@@ -6,7 +6,7 @@ username = os.getenv("CONAN_USERNAME", "memsharded")
 
 class ZMQTestConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
-    requires = "libzmq/4.2.0@%s/%s" % (username, channel)
+    requires = "libzmq/4.2.2@%s/%s" % (username, channel)
     generators = "cmake"
 
     def build(self):

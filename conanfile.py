@@ -1,15 +1,13 @@
 from conans import ConanFile, CMake, tools
-import os
+# import os
 
 class ZMQConan(ConanFile):
-    """ ZMQ is a network, sockets on steroids library. 
-    Safe for use in commercial applications LGPL v3 with static linking exception
-    """
     name = "libzmq"
-    version = "4.2.0"
+    version = "4.2.2"
     version_flat = "4_2_0"
     license = "LGPL"
     url = "https://github.com/bitprim/bitprim-conan-zmq.git"
+    description = "ZMQ is a network, sockets on steroids library. Safe for use in commercial applications LGPL v3 with static linking exception"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False]}
     default_options = "shared=False"
@@ -18,7 +16,7 @@ class ZMQConan(ConanFile):
 
     def source(self):
         self.run("git clone https://github.com/zeromq/libzmq.git")
-        self.run("cd libzmq && git checkout v4.2.0")
+        self.run("cd libzmq && git checkout v4.2.2")
         tools.replace_in_file("libzmq/CMakeLists.txt", "project (ZeroMQ)", """project (ZeroMQ)
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
@@ -30,7 +28,9 @@ conan_basic_setup()
         self.run("cmake --build . %s" % cmake.build_config)
 
     def package(self):
-        self.copy_headers("*", "libzmq/include")
+        # self.copy_headers("*", "libzmq/include")
+        self.copy("*.h", dst="include", src="include")
+        self.copy("*.hpp", dst="include", src="include")
         self.copy("FindZeroMQ.cmake")
         if not self.options.shared:
             self.copy("*libzmq*-mt-s*.lib", "lib", "lib", keep_path=False)
