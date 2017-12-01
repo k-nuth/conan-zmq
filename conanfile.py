@@ -62,7 +62,8 @@ conan_basic_setup()
 
     def package_info(self):
         if self.settings.os != "Windows":
-            self.cpp_info.libs = ["zmq-static"] if not self.options.shared else ["zmq"]
+            # self.cpp_info.libs = ["zmq-static"] if not self.options.shared else ["zmq"]
+            self.cpp_info.libs = ["zmq"]
         else:
             ver = ""
             if self.settings.compiler == "Visual Studio":
