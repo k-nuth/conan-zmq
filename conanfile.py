@@ -34,6 +34,8 @@ conan_basic_setup()
         cmake_cmd_1 = 'cmake libzmq %s -DCMAKE_SH="CMAKE_SH-NOTFOUND" -DZMQ_BUILD_TESTS=OFF -DZMQ_BUILD_FRAMEWORK=OFF' % cmake.command_line
         cmake_cmd_2 = "cmake --build . %s" % cmake.build_config
 
+        print(self.settings.compiler)
+        print(self.settings.compiler.version)
         print(cmake_cmd_1)
         print(cmake_cmd_2)
 
@@ -67,14 +69,17 @@ conan_basic_setup()
         else:
             ver = ""
             if self.settings.compiler == "Visual Studio":
-                if str(self.settings.compiler.version) in ["11", "12", "14"]:  
+                if str(self.settings.compiler.version) in ["11", "12", "14", "15"]:  
                     ver = "-v%s0" % self.settings.compiler.version
                 else:
+                    print(self.settings.compiler.version)
                     ver = "-"
+
             static, stat_fix = ("-static", "s") if not self.options.shared else ("", "")
             debug_fix = "gd" if self.settings.build_type == "Debug" else ""
             fix = ("-%s%s" % (stat_fix, debug_fix)) if stat_fix or debug_fix else ""
             self.cpp_info.libs = ["libzmq%s%s-mt%s-%s" % (static, ver, fix, self.version_flat)]
+            print("libzmq%s%s-mt%s-%s" % (static, ver, fix, self.version_flat))
 
         if not self.options.shared:
             if self.settings.compiler == "Visual Studio":
