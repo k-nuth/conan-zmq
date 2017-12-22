@@ -68,15 +68,15 @@ conan_basic_setup()
             self.cpp_info.libs = ["zmq"]
         else:
             if self.settings.compiler == "Visual Studio":
-                    ver = ""
+                ver = ""
 
-                    if str(self.settings.compiler.version) in ["11", "12", "14"]:  
-                        ver = "-v%s0" % self.settings.compiler.version
-                    elif str(self.settings.compiler.version) ==  "15":  
-                        ver = "-v141"
-                    else:
-                        print(self.settings.compiler.version)
-                        ver = "-"
+                if str(self.settings.compiler.version) in ["11", "12", "14"]:  
+                    ver = "-v%s0" % self.settings.compiler.version
+                elif str(self.settings.compiler.version) ==  "15":  
+                    ver = "-v141"
+                else:
+                    print(self.settings.compiler.version)
+                    ver = "-"
 
                 # static, stat_fix = ("-static", "s") if not self.options.shared else ("", "")
                 stat_fix = "s" if not self.options.shared else ""
