@@ -67,27 +67,30 @@ conan_basic_setup()
             # self.cpp_info.libs = ["zmq-static"] if not self.options.shared else ["zmq"]
             self.cpp_info.libs = ["zmq"]
         else:
-            ver = ""
             if self.settings.compiler == "Visual Studio":
-                if str(self.settings.compiler.version) in ["11", "12", "14"]:  
-                    ver = "-v%s0" % self.settings.compiler.version
-                elif str(self.settings.compiler.version) ==  "15":  
-                    ver = "-v141"
-                else:
-                    print(self.settings.compiler.version)
-                    ver = "-"
+                    ver = ""
 
-            # static, stat_fix = ("-static", "s") if not self.options.shared else ("", "")
-            stat_fix = "s" if not self.options.shared else ""
-            debug_fix = "gd" if self.settings.build_type == "Debug" else ""
-            fix = ("-%s%s" % (stat_fix, debug_fix)) if stat_fix or debug_fix else ""
+                    if str(self.settings.compiler.version) in ["11", "12", "14"]:  
+                        ver = "-v%s0" % self.settings.compiler.version
+                    elif str(self.settings.compiler.version) ==  "15":  
+                        ver = "-v141"
+                    else:
+                        print(self.settings.compiler.version)
+                        ver = "-"
 
-            # self.cpp_info.libs = ["libzmq%s%s-mt%s-%s" % (static, ver, fix, self.version_flat)]
-            # print("libzmq%s%s-mt%s-%s" % (static, ver, fix, self.version_flat))
+                # static, stat_fix = ("-static", "s") if not self.options.shared else ("", "")
+                stat_fix = "s" if not self.options.shared else ""
+                debug_fix = "gd" if self.settings.build_type == "Debug" else ""
+                fix = ("-%s%s" % (stat_fix, debug_fix)) if stat_fix or debug_fix else ""
 
-            self.cpp_info.libs = ["libzmq%s-mt%s-%s" % (ver, fix, self.version_flat)]
-            print("libzmq%s-mt%s-%s" % (ver, fix, self.version_flat))
+                # self.cpp_info.libs = ["libzmq%s%s-mt%s-%s" % (static, ver, fix, self.version_flat)]
+                # print("libzmq%s%s-mt%s-%s" % (static, ver, fix, self.version_flat))
 
+                self.cpp_info.libs = ["libzmq%s-mt%s-%s" % (ver, fix, self.version_flat)]
+                print("libzmq%s-mt%s-%s" % (ver, fix, self.version_flat))
+            else: # MinGW
+                self.cpp_info.libs = ["zmq"]
+                
         if not self.options.shared:
             if self.settings.compiler == "Visual Studio":
                 self.cpp_info.libs.extend(["ws2_32", "wsock32", "Iphlpapi"])
