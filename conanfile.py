@@ -92,7 +92,8 @@ conan_basic_setup()
                 self.cpp_info.libs = ["zmq"]
                 
         if not self.options.shared:
-            if self.settings.compiler == "Visual Studio":
+            # if self.settings.compiler == "Visual Studio":
+            if self.settings.os == "Windows":
                 self.cpp_info.libs.extend(["ws2_32", "wsock32", "Iphlpapi"])
             self.cpp_info.defines = ["ZMQ_STATIC"]
 
