@@ -69,7 +69,7 @@ conan_basic_setup()
         else:
             ver = ""
             if self.settings.compiler == "Visual Studio":
-                if str(self.settings.compiler.version) in ["11", "12", "14", "15"]:  
+                if str(self.settings.compiler.version) in ["11", "12", "14"]:  
                     ver = "-v%s0" % self.settings.compiler.version
                 elif str(self.settings.compiler.version) ==  "15":  
                     ver = "-v141"
