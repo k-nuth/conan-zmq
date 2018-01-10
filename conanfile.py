@@ -13,6 +13,7 @@ class ZMQConan(ConanFile):
     default_options = "shared=False"
     exports = "FindZeroMQ.cmake"
     generators = "cmake"
+    build_policy = "missing"
 
     def source(self):
 
