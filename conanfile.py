@@ -9,8 +9,10 @@ class ZMQConan(ConanFile):
     url = "https://github.com/bitprim/bitprim-conan-zmq.git"
     description = "ZMQ is a network, sockets on steroids library. Safe for use in commercial applications LGPL v3 with static linking exception"
     settings = "os", "compiler", "build_type", "arch"
+
     options = {"shared": [True, False]}
     default_options = "shared=False"
+
     exports = "FindZeroMQ.cmake"
     generators = "cmake"
     build_policy = "missing"
