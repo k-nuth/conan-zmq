@@ -27,8 +27,6 @@ class ZMQConan(ConanFile):
     generators = "cmake"
     build_policy = "missing"
 
-
-
     @property
     def msvc_mt_build(self):
         return "MT" in str(self.settings.compiler.runtime)
@@ -116,7 +114,7 @@ endif()
             if str(self.settings.compiler.libcxx) == "libstdc++" or str(self.settings.compiler.libcxx) == "libstdc++11":
                 cxx11_abi_str = '-DNOT_USE_CPP11_ABI=OFF'
        
-        cmake_cmd_1 = 'cmake libzmq %s %s %s -DCMAKE_SH="CMAKE_SH-NOTFOUND" -DZMQ_BUILD_TESTS=OFF -DZMQ_BUILD_FRAMEWORK=OFF' % (cmake.command_line, verbose_str, cxx11_abi_str)
+        cmake_cmd_1 = 'cmake libzmq %s %s %s -DCMAKE_CXX_FLAGS="-std=c++11" -DCMAKE_SH="CMAKE_SH-NOTFOUND" -DZMQ_BUILD_TESTS=OFF -DZMQ_BUILD_FRAMEWORK=OFF' % (cmake.command_line, verbose_str, cxx11_abi_str)
         cmake_cmd_2 = "cmake --build . %s" % cmake.build_config
 
         self.output.info(self.settings.compiler)
