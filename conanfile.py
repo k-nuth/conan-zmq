@@ -1,10 +1,11 @@
 from conans import ConanFile, CMake, tools
 # import os
+from ci_utils import BitprimCxx11ABIFixer
 
 def option_on_off(option):
     return "ON" if option else "OFF"
 
-class ZMQConan(ConanFile):
+class ZMQConan(BitprimCxx11ABIFixer):
     name = "libzmq"
     version = "4.2.2"
     version_flat = "4_2_2"
@@ -17,13 +18,15 @@ class ZMQConan(ConanFile):
                "shared": [True, False],
                "fPIC": [True, False],
                "verbose": [True, False],
+               "glibcxx_supports_cxx11_abi": "ANY",
     }
 
     default_options = "shared=False", \
                       "fPIC=True", \
-                      "verbose=True"
+                      "verbose=True", \
+                      "glibcxx_supports_cxx11_abi=_DUMMY_",
 
-    exports = "FindZeroMQ.cmake"
+    exports = "FindZeroMQ.cmake", "conan_*", "ci_utils/*"
     generators = "cmake"
     build_policy = "missing"
 
@@ -53,13 +56,19 @@ class ZMQConan(ConanFile):
             if self.options.shared and self.msvc_mt_build:
                 self.options.remove("shared")
 
+    def configure(self):
+        BitprimCxx11ABIFixer.configure(self)
+
+
     def package_id(self):
+        BitprimCxx11ABIFixer.package_id(self)
+
         self.info.options.verbose = "ANY"
 
-        #For Bitprim Packages libstdc++ and libstdc++11 are the same
-        if self.settings.compiler == "gcc" or self.settings.compiler == "clang":
-            if str(self.settings.compiler.libcxx) == "libstdc++" or str(self.settings.compiler.libcxx) == "libstdc++11":
-                self.info.settings.compiler.libcxx = "ANY"
+        # #For Bitprim Packages libstdc++ and libstdc++11 are the same
+        # if self.settings.compiler == "gcc" or self.settings.compiler == "clang":
+        #     if str(self.settings.compiler.libcxx) == "libstdc++" or str(self.settings.compiler.libcxx) == "libstdc++11":
+        #         self.info.settings.compiler.libcxx = "ANY"
 
     def source(self):
 
