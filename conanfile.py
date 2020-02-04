@@ -6,8 +6,8 @@ import os
 import glob
 import platform
 import shutil
-from conans import tools, AutoToolsBuildEnvironment
-from kthbuild import KnuthConanFile
+from conans import tools, CMake
+from kthbuild import KnuthConanFile, option_on_off
 
 class ZMQConan(KnuthConanFile):
     def recipe_dir(self):
@@ -116,6 +116,18 @@ else()
 endif()
 """)      
 
+        tools.replace_in_file("libzmq/CMakeLists.txt", 
+            'CHECK_CXX_COMPILER_FLAG("-std=gnu++11" COMPILER_SUPPORTS_CXX11)',
+            'CHECK_CXX_COMPILER_FLAG("-std=gnu++17" COMPILER_SUPPORTS_CXX17)')      
+
+        tools.replace_in_file("libzmq/CMakeLists.txt", 
+            'if(COMPILER_SUPPORTS_CXX11)',
+            'if(COMPILER_SUPPORTS_CXX17)')
+
+        tools.replace_in_file("libzmq/CMakeLists.txt", 
+            '-std=gnu++11',
+            '-std=gnu++17')
+            
     def build(self):
         # cmake = CMake(self.settings)
         cmake = CMake(self)
