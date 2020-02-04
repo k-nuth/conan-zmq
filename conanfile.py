@@ -183,7 +183,7 @@ endif()
                 elif str(self.settings.compiler.version) ==  "15":  
                     ver = "-v141"
                 elif str(self.settings.compiler.version) ==  "16":  
-                    ver = "-v141"
+                    ver = "-v142"
                 else:
                     self.output.info(self.settings.compiler.version)
                     ver = "-"
