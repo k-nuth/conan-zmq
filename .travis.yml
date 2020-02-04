@@ -1,35 +1,28 @@
-#
-# Copyright (c) 2017 Bitprim developers (see AUTHORS)
-#
-# This file is part of Bitprim.
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Affero General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Affero General Public License for more details.
-#
-# You should have received a copy of the GNU Affero General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
+# Copyright (c) 2016-2020 Knuth Project developers.
+# Distributed under the MIT software license, see the accompanying
+# file COPYING or http://www.opensource.org/licenses/mit-license.php.
+
 
 env:
    global:
      - CONAN_REFERENCE: "libzmq/4.2.2"
-     - CONAN_USERNAME: "bitprim"
-     - CONAN_LOGIN_USERNAME: "bitprim-bintray"
+     - CONAN_USERNAME: "kth"
+     - CONAN_LOGIN_USERNAME: "fpelliccioni"
      - CONAN_CHANNEL: "stable"
-     - CONAN_UPLOAD: "https://api.bintray.com/conan/bitprim/bitprim"
+     - CONAN_UPLOAD: "https://api.bintray.com/conan/k-nuth/kth"
+
+cache:
+  timeout: 600
+  ccache: true
+  directories:
+    - $HOME/Library/Caches/Homebrew
 
 linux: &linux
    os: linux
    sudo: required
+   dist: xenial
    language: python
-   python: "3.6"
+   python: "3.7"
    services:
      - docker
 
@@ -42,59 +35,94 @@ matrix:
 
       # Linux, GCC, libstdc++ ------------------------------------------------------
       - <<: *linux
-        env: CONAN_GCC_VERSIONS=8 CONAN_DOCKER_IMAGE=lasote/conangcc8
+        env: CONAN_GCC_VERSIONS=9 CONAN_DOCKER_IMAGE=conanio/gcc9 CONAN_PIP_INSTALL=kthbuild
 
       - <<: *linux
-        env: CONAN_GCC_VERSIONS=7 CONAN_DOCKER_IMAGE=lasote/conangcc7
+        env: CONAN_GCC_VERSIONS=8 CONAN_DOCKER_IMAGE=conanio/gcc8 CONAN_PIP_INSTALL=kthbuild
 
       - <<: *linux
-        env: CONAN_GCC_VERSIONS=6 CONAN_DOCKER_IMAGE=lasote/conangcc6
-
-      - <<: *linux
-        env: CONAN_GCC_VERSIONS=5 CONAN_DOCKER_IMAGE=lasote/conangcc5
+        env: CONAN_GCC_VERSIONS=7 CONAN_DOCKER_IMAGE=conanio/gcc7 CONAN_PIP_INSTALL=kthbuild
 
       # - <<: *linux
-      #   env: CONAN_GCC_VERSIONS=4.9 CONAN_DOCKER_IMAGE=lasote/conangcc49
+      #   env: CONAN_GCC_VERSIONS=6 CONAN_DOCKER_IMAGE=conanio/gcc6 CONAN_PIP_INSTALL=kthbuild
+
+      # - <<: *linux
+      #   env: CONAN_GCC_VERSIONS=5 CONAN_DOCKER_IMAGE=conanio/gcc5 CONAN_PIP_INSTALL=kthbuild
+
+      # - <<: *linux
+      #   env: CONAN_GCC_VERSIONS=4.9 CONAN_DOCKER_IMAGE=conanio/gcc49 CONAN_PIP_INSTALL=kthbuild
 
       # Linux, Clang, libstdc++ ----------------------------------------------------
       - <<: *linux
-        env: CONAN_CLANG_VERSIONS=6.0 CONAN_DOCKER_IMAGE=lasote/conanclang60
+        env: CONAN_CLANG_VERSIONS=9 CONAN_DOCKER_IMAGE=conanio/clang9 CONAN_PIP_INSTALL=kthbuild
 
       - <<: *linux
-        env: CONAN_CLANG_VERSIONS=5.0 CONAN_DOCKER_IMAGE=lasote/conanclang50
-
-      - <<: *linux
-        env: CONAN_CLANG_VERSIONS=4.0 CONAN_DOCKER_IMAGE=lasote/conanclang40
+        env: CONAN_CLANG_VERSIONS=8 CONAN_DOCKER_IMAGE=conanio/clang8 CONAN_PIP_INSTALL=kthbuild
 
       # - <<: *linux
-      #   env: CONAN_CLANG_VERSIONS=3.9 CONAN_DOCKER_IMAGE=lasote/conanclang39
+      #   env: CONAN_CLANG_VERSIONS=7.0 CONAN_DOCKER_IMAGE=conanio/clang7 CONAN_PIP_INSTALL=kthbuild
+
+      # - <<: *linux
+      #   env: CONAN_CLANG_VERSIONS=6.0 CONAN_DOCKER_IMAGE=conanio/clang60 CONAN_PIP_INSTALL=kthbuild
+
+      # - <<: *linux
+      #   env: CONAN_CLANG_VERSIONS=5.0 CONAN_DOCKER_IMAGE=conanio/clang50 CONAN_PIP_INSTALL=kthbuild
+
+      # - <<: *linux
+      #   env: CONAN_CLANG_VERSIONS=4.0 CONAN_DOCKER_IMAGE=conanio/clang40 CONAN_PIP_INSTALL=kthbuild
+
+      # - <<: *linux
+      #   env: CONAN_CLANG_VERSIONS=3.9 CONAN_DOCKER_IMAGE=conanio/clang39 CONAN_PIP_INSTALL=kthbuild
         
 
       # macOS, apple-Clang, libc++ -------------------------------------------------
 
       - <<: *osx
-        osx_image: xcode9.3
-        env: CONAN_APPLE_CLANG_VERSIONS=9.1
+        osx_image: xcode11
+        env: CONAN_APPLE_CLANG_VERSIONS=11.0
 
-      - <<: *osx
-        osx_image: xcode9
-        env: CONAN_APPLE_CLANG_VERSIONS=9.0
+      # - <<: *osx
+      #   osx_image: xcode10.3
+      #   env: CONAN_APPLE_CLANG_VERSIONS=10.0
 
-      - <<: *osx
-        osx_image: xcode8.3
-        env: CONAN_APPLE_CLANG_VERSIONS=8.1
+      # - <<: *osx
+      #   osx_image: xcode9.4
+      #   env: CONAN_APPLE_CLANG_VERSIONS=9.1
+
+      # - <<: *osx
+      #   osx_image: xcode9
+      #   env: CONAN_APPLE_CLANG_VERSIONS=9.0
+
+      # - <<: *osx
+      #   osx_image: xcode8.3
+      #   env: CONAN_APPLE_CLANG_VERSIONS=8.1
 
       # - <<: *osx
       #   osx_image: xcode7.3
       #   env: CONAN_APPLE_CLANG_VERSIONS=7.3
+
       # - <<: *osx
       #   osx_image: xcode8.2
       #   env: CONAN_APPLE_CLANG_VERSIONS=8.0
 
+
+before_cache:
+  - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then brew cleanup; fi
+
 install:
-  - chmod +x .travis/install.sh
-  - ./.travis/install.sh
+  # - chmod +x .travis/install.sh
+  # - ./.travis/install.sh
+
+  - chmod +x ci_utils/.travis/install.sh
+  - ./ci_utils/.travis/install.sh
 
 script:
+  # - export CONAN_PRINT_RUN_COMMANDS=TRUE
+  # - export CONAN_LOGGING_LEVEL=10
   - chmod +x .travis/run.sh
   - ./.travis/run.sh
+
+  # - chmod +x ci_utils/.travis/run.sh
+  # - ./ci_utils/.travis/run.sh
+
+

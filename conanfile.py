@@ -1,30 +1,52 @@
-from conans import ConanFile, CMake, tools
-# import os
-from ci_utils import BitprimCxx11ABIFixer
+# Copyright (c) 2016-2020 Knuth Project developers.
+# Distributed under the MIT software license, see the accompanying
+# file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-def option_on_off(option):
-    return "ON" if option else "OFF"
+import os
+import glob
+import platform
+import shutil
+from conans import tools, AutoToolsBuildEnvironment
+from kthbuild import KnuthConanFile
 
-class ZMQConan(BitprimCxx11ABIFixer):
+class ZMQConan(KnuthConanFile):
+    def recipe_dir(self):
+        return os.path.dirname(os.path.abspath(__file__))
+
     name = "libzmq"
     version = "4.2.2"
     version_flat = "4_2_2"
     license = "LGPL"
-    url = "https://github.com/bitprim/bitprim-conan-zmq.git"
+    url = "https://github.com/k-nuth/conan-zmq.git"
     description = "ZMQ is a network, sockets on steroids library. Safe for use in commercial applications LGPL v3 with static linking exception"
     settings = "os", "compiler", "build_type", "arch"
 
     options = {
-               "shared": [True, False],
-               "fPIC": [True, False],
-               "verbose": [True, False],
-               "glibcxx_supports_cxx11_abi": "ANY",
+        "shared": [True, False],
+        "fPIC": [True, False],
+        "verbose": [True, False],
+
+        "microarchitecture": "ANY",
+        "fix_march": [True, False],
+        "march_id": "ANY",
+
+        "cxxflags": "ANY",
+        "cflags": "ANY",
+        "glibcxx_supports_cxx11_abi": "ANY",
     }
 
-    default_options = "shared=False", \
-                      "fPIC=True", \
-                      "verbose=True", \
-                      "glibcxx_supports_cxx11_abi=_DUMMY_",
+    default_options = {
+        "shared": False,
+        "fPIC": True,
+        "verbose": True,
+        "microarchitecture": '_DUMMY_',
+        "fix_march": False,
+        "march_id": '_DUMMY_',
+        "cxxflags": '_DUMMY_',
+        "cflags": '_DUMMY_',
+        "glibcxx_supports_cxx11_abi": '_DUMMY_',
+    }
+
 
     exports = "FindZeroMQ.cmake", "conan_*", "ci_utils/*"
     generators = "cmake"
@@ -49,26 +71,13 @@ class ZMQConan(BitprimCxx11ABIFixer):
             return self.options.shared
 
     def config_options(self):
-        self.output.info('*-*-*-*-*-* def config_options(self):')
-        if self.settings.compiler == "Visual Studio":
-            self.options.remove("fPIC")
-
-            if self.options.shared and self.msvc_mt_build:
-                self.options.remove("shared")
+        KnuthConanFile.config_options(self)
 
     def configure(self):
-        BitprimCxx11ABIFixer.configure(self)
-
+        KnuthConanFile.configure(self)
 
     def package_id(self):
-        BitprimCxx11ABIFixer.package_id(self)
-
-        self.info.options.verbose = "ANY"
-
-        # #For Bitprim Packages libstdc++ and libstdc++11 are the same
-        # if self.settings.compiler == "gcc" or self.settings.compiler == "clang":
-        #     if str(self.settings.compiler.libcxx) == "libstdc++" or str(self.settings.compiler.libcxx) == "libstdc++11":
-        #         self.info.settings.compiler.libcxx = "ANY"
+        KnuthConanFile.package_id(self)
 
     def source(self):
 
@@ -76,7 +85,7 @@ class ZMQConan(BitprimCxx11ABIFixer):
         # self.run("git clone https://github.com/zeromq/libzmq.git")
         # self.run("git clone git@github.com:zeromq/libzmq.git")
 
-        self.run("cd libzmq && git checkout tags/v4.2.2 -b bitprim_4.2.2")
+        self.run("cd libzmq && git checkout tags/v4.2.2 -b kth_4.2.2")
 
 #         tools.replace_in_file("libzmq/CMakeLists.txt", "project (ZeroMQ)", """project (ZeroMQ)
 # include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
@@ -94,10 +103,10 @@ if(EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
     if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
         if (NOT NOT_USE_CPP11_ABI)
             add_definitions(-D_GLIBCXX_USE_CXX11_ABI=1)
-            message( STATUS "Bitprim: Using _GLIBCXX_USE_CXX11_ABI=1")
+            message( STATUS "Knuth: Using _GLIBCXX_USE_CXX11_ABI=1")
         else()
             add_definitions(-D_GLIBCXX_USE_CXX11_ABI=0)
-            message( STATUS "Bitprim: Using _GLIBCXX_USE_CXX11_ABI=0")
+            message( STATUS "Knuth: Using _GLIBCXX_USE_CXX11_ABI=0")
         endif()
         # set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wno-macro-redefined")
         # set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wno-builtin-macro-redefined")
@@ -123,7 +132,7 @@ endif()
             if str(self.settings.compiler.libcxx) == "libstdc++" or str(self.settings.compiler.libcxx) == "libstdc++11":
                 cxx11_abi_str = '-DNOT_USE_CPP11_ABI=OFF'
        
-        cmake_cmd_1 = 'cmake libzmq %s %s %s -DCMAKE_CXX_FLAGS="-std=c++11" -DCMAKE_SH="CMAKE_SH-NOTFOUND" -DZMQ_BUILD_TESTS=OFF -DZMQ_BUILD_FRAMEWORK=OFF' % (cmake.command_line, verbose_str, cxx11_abi_str)
+        cmake_cmd_1 = 'cmake libzmq %s %s %s -DCMAKE_CXX_FLAGS="-std=c++17" -DCMAKE_SH="CMAKE_SH-NOTFOUND" -DZMQ_BUILD_TESTS=OFF -DZMQ_BUILD_FRAMEWORK=OFF' % (cmake.command_line, verbose_str, cxx11_abi_str)
         cmake_cmd_2 = "cmake --build . %s" % cmake.build_config
 
         self.output.info(self.settings.compiler)
