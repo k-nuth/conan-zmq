@@ -11,7 +11,7 @@ environment:
     # PYTHON_VERSION: "3.7.3"
     # PYTHON_ARCH: "32"
 
-    CONAN_REFERENCE: "libzmq/4.2.2"
+    CONAN_REFERENCE: "libzmq/4.3.2"
     CONAN_USERNAME: "kth"
     CONAN_LOGIN_USERNAME: "fpelliccioni"
     CONAN_CHANNEL: "stable"

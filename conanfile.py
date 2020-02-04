@@ -14,8 +14,8 @@ class ZMQConan(KnuthConanFile):
         return os.path.dirname(os.path.abspath(__file__))
 
     name = "libzmq"
-    version = "4.2.2"
-    version_flat = "4_2_2"
+    version = "4.3.2"
+    version_flat = "4_3_2"
     license = "LGPL"
     url = "https://github.com/k-nuth/conan-zmq.git"
     description = "ZMQ is a network, sockets on steroids library. Safe for use in commercial applications LGPL v3 with static linking exception"
@@ -85,7 +85,7 @@ class ZMQConan(KnuthConanFile):
         # self.run("git clone https://github.com/zeromq/libzmq.git")
         # self.run("git clone git@github.com:zeromq/libzmq.git")
 
-        self.run("cd libzmq && git checkout tags/v4.2.2 -b kth_4.2.2")
+        self.run("cd libzmq && git checkout tags/v4.3.2 -b kth_4.3.2")
 
 #         tools.replace_in_file("libzmq/CMakeLists.txt", "project (ZeroMQ)", """project (ZeroMQ)
 # include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
