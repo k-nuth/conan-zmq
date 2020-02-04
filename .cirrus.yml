@@ -80,5 +80,3 @@ cirrus_freebsd_clang_test_task:
     - pwd
     - ls -ltra
     - python build.py
-
-
