@@ -87,12 +87,7 @@ class ZMQConan(KnuthConanFile):
 
         self.run("cd libzmq && git checkout tags/v4.3.2 -b kth_4.3.2")
 
-#         tools.replace_in_file("libzmq/CMakeLists.txt", "project (ZeroMQ)", """project (ZeroMQ)
-# include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-# conan_basic_setup()
-# """)
-
-        tools.replace_in_file("libzmq/CMakeLists.txt", "project (ZeroMQ)", """project (ZeroMQ)
+        tools.replace_in_file("libzmq/CMakeLists.txt", "project(ZeroMQ)", """project(ZeroMQ)
 if(EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
     include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
     conan_basic_setup()
@@ -117,8 +112,8 @@ endif()
 """)      
 
         tools.replace_in_file("libzmq/CMakeLists.txt", 
-            'CHECK_CXX_COMPILER_FLAG("-std=gnu++11" COMPILER_SUPPORTS_CXX11)',
-            'CHECK_CXX_COMPILER_FLAG("-std=gnu++17" COMPILER_SUPPORTS_CXX17)')      
+            'check_cxx_compiler_flag("-std=gnu++11" COMPILER_SUPPORTS_CXX11)',
+            'check_cxx_compiler_flag("-std=gnu++17" COMPILER_SUPPORTS_CXX17)')
 
         tools.replace_in_file("libzmq/CMakeLists.txt", 
             'if(COMPILER_SUPPORTS_CXX11)',
@@ -127,7 +122,7 @@ endif()
         tools.replace_in_file("libzmq/CMakeLists.txt", 
             '-std=gnu++11',
             '-std=gnu++17')
-            
+
     def build(self):
         # cmake = CMake(self.settings)
         cmake = CMake(self)
@@ -186,6 +181,8 @@ endif()
                 if str(self.settings.compiler.version) in ["11", "12", "14"]:  
                     ver = "-v%s0" % self.settings.compiler.version
                 elif str(self.settings.compiler.version) ==  "15":  
+                    ver = "-v141"
+                elif str(self.settings.compiler.version) ==  "16":  
                     ver = "-v141"
                 else:
                     self.output.info(self.settings.compiler.version)
